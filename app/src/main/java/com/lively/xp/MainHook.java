@@ -11,7 +11,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class MainHook implements IXposedHookLoadPackage {
 
-    private static final String BUILD_ID = "20260222-2236-core-limits";
+    private static final String BUILD_ID = "20260222-2315-safe-no-shortcircuit";
 
     private static final String FLOAT_HANDLE_CONTROLLER =
             "com.android.server.wm.FloatHandleController";
@@ -130,7 +130,7 @@ public class MainHook implements IXposedHookLoadPackage {
             }
         }, new MethodHooker() {
             @Override
-            public void before(Method method, XC_MethodHook.MethodHookParam param) {
+            public void after(Method method, XC_MethodHook.MethodHookParam param) {
                 param.setResult(Boolean.FALSE);
             }
         });
