@@ -11,7 +11,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class MainHook implements IXposedHookLoadPackage {
 
-    private static final String BUILD_ID = "20260222-2315-safe-no-shortcircuit";
+    private static final String BUILD_ID = "20260222-2338-crash-hotfix";
 
     private static final String FLOAT_HANDLE_CONTROLLER =
             "com.android.server.wm.FloatHandleController";
@@ -54,26 +54,15 @@ public class MainHook implements IXposedHookLoadPackage {
             return;
         }
 
-        hookLimitGuard(controllerClass, "checkLivelySizeMaybeChangeToStatic");
         hookBooleanReturn(controllerClass, "isSupporLivelyWithToast", true);
         hookBooleanReturn(controllerClass, "isSupporLively", true);
         hookIntWhenCaller(controllerClass, "getLivelySize", 1,
-                new CallerSpec(CONTROLLER_CLASS, "addFloatHandle"),
-                new CallerSpec(CONTROLLER_CLASS, "checkLivelySizeMaybeChangeToStatic"));
+                new CallerSpec(CONTROLLER_CLASS, "addFloatHandle"));
         hookIntWhenCaller(controllerClass, "getStaticSize", 0,
-                new CallerSpec(CONTROLLER_CLASS, "addFloatHandle"),
-                new CallerSpec(CONTROLLER_CLASS, "checkStaticSizeMaybeRemove"),
-                new CallerSpec(CONTROLLER_CLASS, "checkIfNeedExitStatic"));
+                new CallerSpec(CONTROLLER_CLASS, "addFloatHandle"));
     }
 
     private void hookStaticLimits(ClassLoader classLoader) {
-        Class<?> controllerClass = findClass(FLOAT_HANDLE_CONTROLLER, classLoader);
-        if (controllerClass == null) {
-            return;
-        }
-
-        hookLimitGuard(controllerClass, "checkStaticSizeMaybeRemove");
-        hookLimitGuard(controllerClass, "checkIfNeedExitStatic");
     }
 
     private void hookConfigGuards(ClassLoader classLoader) {
