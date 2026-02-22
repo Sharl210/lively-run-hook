@@ -10,8 +10,8 @@ android {
         applicationId "com.lively.xp"
         minSdk 21
         targetSdk 33
-        versionCode 8
-        versionName "1.5.3"
+        versionCode 11
+        versionName "2.0.1"
     }
 
     buildTypes {
